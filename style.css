@@ -1,0 +1,330 @@
+/* Base Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #fff;
+  color: #111;
+}
+
+/* Header */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 2rem;
+  background-color: black;
+  flex-wrap: wrap;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.brand img {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
+.company-name {
+  font-size: 1.4rem;
+  color: gold;
+  font-weight: 700;
+  font-family: 'Georgia', serif;
+}
+
+nav {
+  position: relative;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.portal-btn {
+  background-color: gold;
+  color: black;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  font-weight: bold;
+}
+
+/* Hamburger */
+.hamburger {
+  display: none;
+  font-size: 2rem;
+  color: gold;
+  cursor: pointer;
+}
+
+#menu-toggle {
+  display: none;
+}
+
+/* Hero */
+.hero {
+  padding: 3rem 2rem;
+  background: linear-gradient(135deg, white, #f9f9f9);
+  text-align: center;
+}
+
+.hero-text h1 {
+  color: #bfa046;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.hero-text p {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+/* Services */
+.services-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.service-item {
+  background-color: #fff;
+  border: 2px solid gold;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  text-align: left;
+  padding: 1rem;
+  transition: transform 0.3s ease-in-out;
+}
+
+.service-item:hover {
+  transform: translateY(-5px);
+}
+
+.service-item img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.service-item h3 {
+  color: #bfa046;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.service-item p {
+  color: #444;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Contact */
+.contact {
+  padding: 2rem;
+  background-color: #000;
+  color: white;
+  text-align: center;
+}
+
+.contact h2 {
+  color: gold;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.contact-icons {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.contact-icons img {
+  width: 40px;
+  height: 40px;
+  filter: invert(1);
+  transition: transform 0.3s;
+}
+
+.contact-icons img:hover {
+  transform: scale(1.1);
+}
+
+/* Footer */
+footer {
+  background-color: #111;
+  color: gold;
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+}
+
+/* Animations */
+.fade-in {
+  animation: fadeIn 1.2s ease-in forwards;
+  opacity: 0;
+}
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+
+  .menu {
+    display: none;
+    flex-direction: column;
+    gap: 1rem;
+    position: absolute;
+    right: 2rem;
+    top: 60px;
+    background: black;
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  #menu-toggle:checked + .hamburger + .menu {
+    display: flex;
+  }
+
+  .services-gallery {
+    grid-template-columns: 1fr;
+  }
+}
+/* ===== Employee Portal Styling ===== */
+
+.portal-header {
+  background-color: #1a1a1a; /* black */
+  color: #d4af37; /* white gold */
+  padding: 20px 0;
+  text-align: center;
+  font-family: 'Georgia', serif;
+  font-size: 1.8rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.portal-container {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 0 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #fff;
+}
+
+.auth-section {
+  display: flex;
+  justify-content: space-around;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.form-card {
+  background: #111; /* very dark black */
+  border: 2px solid #d4af37;
+  border-radius: 12px;
+  padding: 30px 25px;
+  width: 320px;
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+  transition: box-shadow 0.3s ease;
+}
+
+.form-card:hover {
+  box-shadow: 0 0 25px rgba(212, 175, 55, 0.9);
+}
+
+.form-card h2 {
+  margin-bottom: 15px;
+  color: #d4af37;
+  text-align: center;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+}
+
+.form-card input[type="email"],
+.form-card input[type="password"] {
+  width: 100%;
+  padding: 12px 14px;
+  margin: 12px 0 20px 0;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  background-color: #222;
+  color: #eee;
+  transition: background-color 0.3s ease;
+}
+
+.form-card input[type="email"]:focus,
+.form-card input[type="password"]:focus {
+  background-color: #333;
+  outline: none;
+  box-shadow: 0 0 8px #d4af37;
+}
+
+.gold-button {
+  background: linear-gradient(45deg, #d4af37, #b08d3b);
+  color: #111;
+  border: none;
+  padding: 12px 0;
+  width: 100%;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: background 0.3s ease;
+  box-shadow: 0 4px 8px rgba(212, 175, 55, 0.6);
+}
+
+.gold-button:hover {
+  background: linear-gradient(45deg, #b08d3b, #d4af37);
+  box-shadow: 0 6px 15px rgba(212, 175, 55, 1);
+}
+
+.secure-section {
+  background: #111;
+  border: 2px solid #d4af37;
+  border-radius: 12px;
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+  max-width: 500px;
+  margin: 0 auto;
+  color: #fff;
+  font-size: 1.1rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Responsive tweaks */
+@media (max-width: 720px) {
+  .auth-section {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .form-card {
+    width: 90%;
+  }
+}

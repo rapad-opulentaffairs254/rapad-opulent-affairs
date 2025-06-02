@@ -1,4 +1,4 @@
-/* Base Reset */
+/* ========== Base Reset ========== */
 * {
   margin: 0;
   padding: 0;
@@ -11,7 +11,7 @@ body {
   color: #111;
 }
 
-/* Header */
+/* ========== Header ========== */
 header {
   display: flex;
   justify-content: space-between;
@@ -64,7 +64,7 @@ nav a {
   font-weight: bold;
 }
 
-/* Hamburger */
+/* ========== Hamburger Menu ========== */
 .hamburger {
   display: none;
   font-size: 2rem;
@@ -76,7 +76,7 @@ nav a {
   display: none;
 }
 
-/* Hero */
+/* ========== Hero Section ========== */
 .hero {
   padding: 3rem 2rem;
   background: linear-gradient(135deg, white, #f9f9f9);
@@ -95,7 +95,7 @@ nav a {
   margin-bottom: 2rem;
 }
 
-/* Services */
+/* ========== Services Section ========== */
 .services-gallery {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -137,7 +137,7 @@ nav a {
   line-height: 1.5;
 }
 
-/* Contact */
+/* ========== Contact Section ========== */
 .contact {
   padding: 2rem;
   background-color: #000;
@@ -169,7 +169,7 @@ nav a {
   transform: scale(1.1);
 }
 
-/* Footer */
+/* ========== Footer ========== */
 footer {
   background-color: #111;
   color: gold;
@@ -178,7 +178,7 @@ footer {
   font-size: 0.9rem;
 }
 
-/* Animations */
+/* ========== Animation ========== */
 .fade-in {
   animation: fadeIn 1.2s ease-in forwards;
   opacity: 0;
@@ -187,7 +187,7 @@ footer {
   to { opacity: 1; }
 }
 
-/* Responsive */
+/* ========== Responsive Nav ========== */
 @media (max-width: 768px) {
   .hamburger {
     display: block;
@@ -213,11 +213,11 @@ footer {
     grid-template-columns: 1fr;
   }
 }
-/* ===== Employee Portal Styling ===== */
 
+/* ========== Portal Header ========== */
 .portal-header {
-  background-color: #1a1a1a; /* black */
-  color: #d4af37; /* white gold */
+  background-color: #1a1a1a;
+  color: #d4af37;
   padding: 20px 0;
   text-align: center;
   font-family: 'Georgia', serif;
@@ -226,6 +226,7 @@ footer {
   text-transform: uppercase;
 }
 
+/* ========== Login/Register Container ========== */
 .portal-container {
   max-width: 700px;
   margin: 40px auto;
@@ -242,7 +243,7 @@ footer {
 }
 
 .form-card {
-  background: #111; /* very dark black */
+  background: #111;
   border: 2px solid #d4af37;
   border-radius: 12px;
   padding: 30px 25px;
@@ -303,6 +304,7 @@ footer {
   box-shadow: 0 6px 15px rgba(212, 175, 55, 1);
 }
 
+/* ========== Dashboard Panels ========== */
 .secure-section {
   background: #111;
   border: 2px solid #d4af37;
@@ -317,7 +319,22 @@ footer {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Responsive tweaks */
+#userList {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+#userList li {
+  background: #222;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-left: 4px solid gold;
+  color: #eee;
+  font-size: 0.95rem;
+}
+
+/* ========== Responsive Tweaks ========== */
 @media (max-width: 720px) {
   .auth-section {
     flex-direction: column;
@@ -326,5 +343,196 @@ footer {
 
   .form-card {
     width: 90%;
+  }
+
+  .secure-section {
+    margin: 20px 10px;
+  }
+}
+/* style.css */
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #fff;
+  color: #222;
+}
+
+header {
+  background: #111;
+  color: gold;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+header .brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+header .brand img {
+  height: 40px;
+}
+
+header .company-name {
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+nav ul.menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 20px;
+}
+
+nav ul.menu li a,
+nav ul.menu li a.portal-btn {
+  color: gold;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+nav ul.menu li a.portal-btn {
+  border: 1.5px solid gold;
+  padding: 6px 12px;
+  border-radius: 5px;
+}
+
+.portal-header {
+  background: #111;
+  color: gold;
+  padding: 10px 20px;
+  font-weight: bold;
+  font-size: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.portal-container {
+  max-width: 900px;
+  margin: 25px auto;
+  padding: 0 15px;
+}
+
+.gold-button {
+  background: gold;
+  border: none;
+  padding: 10px 20px;
+  font-weight: 700;
+  color: #111;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background 0.3s;
+}
+
+.gold-button:hover {
+  background: #cc9f00;
+}
+
+/* Tabs */
+.tabs-nav {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tab-btn {
+  padding: 10px 20px;
+  border: 1.5px solid gold;
+  background: #fff;
+  color: #111;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: 600;
+}
+
+.tab-btn.active {
+  background: gold;
+  color: #111;
+  font-weight: 700;
+}
+
+.tab-content {
+  display: none;
+  border: 1.5px solid gold;
+  padding: 15px;
+  border-radius: 5px;
+  background: #fff;
+  min-height: 200px;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Forms */
+form label {
+  display: block;
+  margin: 10px 0 5px;
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="password"],
+form input[type="tel"],
+form select,
+form textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1.5px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+form textarea {
+  resize: vertical;
+}
+
+.task-item {
+  background: #fffae5;
+  padding: 10px;
+  border: 1px solid gold;
+  margin-bottom: 10px;
+  border-radius: 4px;
+}
+
+/* Messages */
+#profileMsg,
+#reportMsg,
+#scheduleMsg,
+#leaveMsg,
+#dutyMsg {
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+/* Contact icons */
+.contact-icons a img {
+  width: 30px;
+  margin-right: 15px;
+  vertical-align: middle;
+}
+
+/* Responsive for small screens */
+@media (max-width: 600px) {
+  nav ul.menu {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .tabs-nav {
+    flex-direction: column;
+  }
+
+  .gold-button {
+    width: 100%;
   }
 }

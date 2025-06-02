@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Dashboard - Rapad Opulent Affairs</title>
+  <link rel="stylesheet" href="style.css" />
+  <script type="module" src="main.js"></script>
+</head>
+<body>
+  <header class="portal-header">
+    <h1>Admin Dashboard</h1>
+    <button id="logoutBtn" class="gold-button" style="float:right; margin-right: 20px;">Logout</button>
+  </header>
+
+  <main class="portal-container">
+    <nav class="tabs-nav">
+      <button class="tab-btn active" data-tab="manageEmployeesTab">Manage Employees</button>
+      <button class="tab-btn" data-tab="assignSchedulesTab">Assign Schedules</button>
+      <button class="tab-btn" data-tab="leaveManagementTab">Leaves & Offs</button>
+      <button class="tab-btn" data-tab="assignDutiesTab">Assign Duties</button>
+    </nav>
+
+    <section id="manageEmployeesTab" class="tab-content active">
+      <h2>Manage Employees</h2>
+      <div id="employeesList">Loading employees...</div>
+    </section>
+
+    <section id="assignSchedulesTab" class="tab-content">
+      <h2>Assign Schedules</h2>
+      <form id="scheduleForm">
+        <label for="employeeSelectSchedule">Select Employee</label>
+        <select id="employeeSelectSchedule" required></select>
+
+        <label for="scheduleDetails">Schedule Details</label>
+        <textarea id="scheduleDetails" rows="4" required></textarea>
+
+        <button type="submit" class="gold-button">Assign Schedule</button>
+      </form>
+      <div id="scheduleMsg"></div>
+    </section>
+
+    <section id="leaveManagementTab" class="tab-content">
+      <h2>Manage Leaves & Offs</h2>
+      <form id="leaveForm">
+        <label for="employeeSelectLeave">Select Employee</label>
+        <select id="employeeSelectLeave" required></select>
+
+        <label for="leaveDetails">Leave/Off Details</label>
+        <textarea id="leaveDetails" rows="4" required></textarea>
+
+        <button type="submit" class="gold-button">Submit Leave/Off</button>
+      </form>
+      <div id="leaveMsg"></div>
+    </section>
+
+    <section id="assignDutiesTab" class="tab-content">
+      <h2>Assign Duties</h2>
+      <form id="dutyForm">
+        <label for="employeeSelectDuty">Select Employee</label>
+        <select id="employeeSelectDuty" required></select>
+
+        <label for="dutyDetails">Duty Details</label>
+        <textarea id="dutyDetails" rows="4" required></textarea>
+
+        <button type="submit" class="gold-button">Assign Duty</button>
+      </form>
+      <div id="dutyMsg"></div>
+    </section>
+  </main>
+</body>
+</html>

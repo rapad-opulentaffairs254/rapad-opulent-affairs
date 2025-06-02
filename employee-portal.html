@@ -2,60 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Employee Portal - Rapad Opulent Affairs</title>
   <link rel="stylesheet" href="style.css" />
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyD6zFhOdgWY1-W0QucbgKbnsdSZ5GuHeIE",
-      authDomain: "rapad-opulent-affairs.firebaseapp.com",
-      projectId: "rapad-opulent-affairs",
-      storageBucket: "rapad-opulent-affairs.firebasestorage.app",
-      messagingSenderId: "195096119699",
-      appId: "1:195096119699:web:f4598f10231c8201dac066",
-      measurementId: "G-P9J9YGH127"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    document.getElementById("registerForm").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const email = e.target.email.value;
-      const password = e.target.password.value;
-      createUserWithEmailAndPassword(auth, email, password)
-        .then(() => alert("Registered Successfully!"))
-        .catch((error) => alert(error.message));
-    });
-
-    document.getElementById("loginForm").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const email = e.target.email.value;
-      const password = e.target.password.value;
-      signInWithEmailAndPassword(auth, email, password)
-        .then(() => alert("Logged in successfully!"))
-        .catch((error) => alert(error.message));
-    });
-
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      signOut(auth).then(() => alert("Logged out."));
-    });
-
-    onAuthStateChanged(auth, (user) => {
-      const content = document.getElementById("secureContent");
-      const authSection = document.getElementById("authSection");
-      if (user) {
-        authSection.style.display = "none";
-        content.style.display = "block";
-      } else {
-        authSection.style.display = "block";
-        content.style.display = "none";
-      }
-    });
-  </script>
+  <script type="module" src="main.js"></script>
 </head>
 <body>
   <header class="portal-header">
@@ -63,7 +13,6 @@
   </header>
 
   <main class="portal-container">
-    <!-- AUTH SECTION -->
     <section id="authSection" class="auth-section">
       <div class="form-card">
         <h2>Login</h2>
@@ -84,11 +33,8 @@
       </div>
     </section>
 
-    <!-- SECURE SECTION -->
-    <section id="secureContent" style="display: none;" class="secure-section">
-      <h2>Welcome, Employee</h2>
-      <p>This is a protected area. Only logged-in staff can view this.</p>
-      <button id="logoutBtn" class="gold-button">Logout</button>
+    <section id="loadingSection" style="display:none; text-align:center; margin-top:20px;">
+      <p>Loading, please wait...</p>
     </section>
   </main>
 </body>

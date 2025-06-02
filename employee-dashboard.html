@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Employee Dashboard - Rapad Opulent Affairs</title>
+  <link rel="stylesheet" href="style.css" />
+  <script type="module" src="main.js"></script>
+</head>
+<body>
+  <header class="portal-header">
+    <h1>Employee Dashboard</h1>
+    <button id="logoutBtn" class="gold-button" style="float:right; margin-right: 20px;">Logout</button>
+  </header>
+
+  <main class="portal-container">
+    <nav class="tabs-nav">
+      <button class="tab-btn active" data-tab="profileTab">Update Profile</button>
+      <button class="tab-btn" data-tab="reportTab">Submit Report</button>
+      <button class="tab-btn" data-tab="tasksTab">Tasks & Schedules</button>
+    </nav>
+
+    <section id="profileTab" class="tab-content active">
+      <h2>Update Profile</h2>
+      <form id="profileForm">
+        <label for="displayName">Full Name</label>
+        <input type="text" id="displayName" name="displayName" placeholder="Enter your full name" required />
+
+        <label for="phoneNumber">Phone Number</label>
+        <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Enter your phone number" />
+
+        <button type="submit" class="gold-button">Save Profile</button>
+      </form>
+      <div id="profileMsg"></div>
+    </section>
+
+    <section id="reportTab" class="tab-content">
+      <h2>Submit Report</h2>
+      <form id="reportForm">
+        <label for="reportText">Report Details</label>
+        <textarea id="reportText" name="reportText" rows="5" placeholder="Write your report here..." required></textarea>
+        <button type="submit" class="gold-button">Submit Report</button>
+      </form>
+      <div id="reportMsg"></div>
+    </section>
+
+    <section id="tasksTab" class="tab-content">
+      <h2>Your Tasks & Schedules</h2>
+      <div id="tasksList">Loading tasks...</div>
+    </section>
+  </main>
+</body>
+</html>

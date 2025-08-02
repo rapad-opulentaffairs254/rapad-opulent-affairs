@@ -139,8 +139,18 @@
     <h1 class="portal-header">Book a Luxury Event</h1>
     <p style="text-align:center; margin-bottom: 30px; color: #555;">Let us know your vision, and we'll bring it to life with elegance and perfection.</p>
 
-    <form id="orderForm" action="https://formspree.io/f/yourFormID" method="POST" class="form-card">
-      <h2>Order Form</h2>
+<<form action="https://formspree.io/f/{form_id}" method="post">
+  <label for="email">Your Email</label>
+  <input name="Email" id="email" type="email">
+  <button type="submit">Submit</button>
+</form>
+
+<!-- Success message (initially hidden) -->
+<div id="formMessage" class="hidden success-message">
+  Thank you! Your booking was successfully submitted.
+</div>
+
+    <h2>Order Form</h2>
 
       <label for="fullName">Full Name*</label>
       <input type="text" id="fullName" name="fullName" required />
@@ -177,5 +187,33 @@
   <footer>
     <p>&copy; 2025 Rapad Opulent Affairs. All rights reserved.</p>
   </footer>
+<script>
+document.getElementById('orderForm').addEventListener('submit', async function(e) {
+  e.preventDefault(); // Prevent default redirect
+  const form = e.target;
+  const data = new FormData(form);
+
+  const response = await fetch(form.action, {
+    method: form.method,
+    body: data,
+    headers: {
+      'Accept': 'application/json'
+    }
+  });
+
+  const messageEl = document.getElementById('formMessage');
+
+  if (response.ok) {
+    form.reset();
+    messageEl.textContent = "Thank you! Your booking was successfully submitted.";
+    messageEl.classList.remove('hidden');
+    messageEl.classList.add('fade-in');
+  } else {
+    messageEl.textContent = "Oops! Something went wrong. Please try again.";
+    messageEl.classList.remove('hidden');
+  }
+});
+</script>
+
 </body>
 </html>

@@ -424,6 +424,19 @@ form textarea {
   margin-bottom: 10px;
   border-radius: 4px;
 }
+.success-message {
+  margin-top: 1.5rem;
+  background-color: #111;
+  color: gold;
+  padding: 1rem;
+  border-radius: 10px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.hidden {
+  display: none;
+}
 
 /* ========== Responsive Fixes ========== */
 @media (max-width: 600px) {

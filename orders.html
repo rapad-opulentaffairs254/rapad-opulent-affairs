@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Book a Service | Rapad Opulent Affairs</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Open+Sans&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #fdfaf6;
+      color: #333;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #fff;
+      padding: 20px 40px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+    }
+
+    .brand img {
+      height: 50px;
+      margin-right: 12px;
+    }
+
+    .company-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #8c5e3c;
+    }
+
+    nav ul.menu {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      padding: 0;
+      margin: 0;
+    }
+
+    nav ul.menu li a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+    }
+
+    .portal-container {
+      max-width: 800px;
+      margin: 60px auto;
+      background: #fff;
+      padding: 40px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      border-radius: 12px;
+    }
+
+    .portal-header {
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+      color: #8c5e3c;
+    }
+
+    .form-card h2 {
+      margin-bottom: 20px;
+      color: #444;
+    }
+
+    form label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    form input, form select, form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    .gold-button {
+      background: linear-gradient(to right, #b89d70, #d4af7f);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 1rem;
+      border-radius: 8px;
+      margin-top: 25px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .gold-button:hover {
+      background: linear-gradient(to right, #a88c4d, #c19a66);
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 0;
+      font-size: 0.9rem;
+      color: #777;
+      background-color: #f5f5f5;
+      margin-top: 60px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <img src="images/logo.png" alt="Rapad Logo" />
+      <span class="company-name">Rapad Opulent Affairs</span>
+    </div>
+    <nav>
+      <ul class="menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#services">Services</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+        <li><a href="orders.html">Book Now</a></li>
+        <li><a href="employee-portal.html">Employee Portal</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="portal-container">
+    <h1 class="portal-header">Book a Luxury Event</h1>
+    <p style="text-align:center; margin-bottom: 30px; color: #555;">Let us know your vision, and we'll bring it to life with elegance and perfection.</p>
+
+    <form id="orderForm" action="https://formspree.io/f/yourFormID" method="POST" class="form-card">
+      <h2>Order Form</h2>
+
+      <label for="fullName">Full Name*</label>
+      <input type="text" id="fullName" name="fullName" required />
+
+      <label for="email">Email Address*</label>
+      <input type="email" id="email" name="email" required />
+
+      <label for="phone">Phone Number*</label>
+      <input type="tel" id="phone" name="phone" required />
+
+      <label for="service">Select Service*</label>
+      <select id="service" name="service" required>
+        <option value="">-- Choose an option --</option>
+        <option value="Wedding Planning">Luxury Wedding Planning</option>
+        <option value="Corporate Event">Corporate & VIP Events</option>
+        <option value="Themed Celebration">Themed Celebrations & Décor</option>
+      </select>
+
+      <label for="eventDate">Preferred Event Date*</label>
+      <input type="date" id="eventDate" name="eventDate" required />
+
+      <label for="location">Event Location*</label>
+      <input type="text" id="location" name="location" required />
+
+      <label for="details">Additional Details</label>
+      <textarea id="details" name="details" rows="4" placeholder="Tell us more about your theme or preferences..."></textarea>
+
+      <input type="hidden" name="_captcha" value="false">
+
+      <button type="submit" class="gold-button">Submit Order</button>
+    </form>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Rapad Opulent Affairs. All rights reserved.</p>
+  </footer>
+</body>
+</html>

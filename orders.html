@@ -6,117 +6,6 @@
   <title>Book a Service | Rapad Opulent Affairs</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Open+Sans&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Open Sans', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #fdfaf6;
-      color: #333;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #fff;
-      padding: 20px 40px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-    }
-
-    .brand img {
-      height: 50px;
-      margin-right: 12px;
-    }
-
-    .company-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: #8c5e3c;
-    }
-
-    nav ul.menu {
-      list-style: none;
-      display: flex;
-      gap: 20px;
-      padding: 0;
-      margin: 0;
-    }
-
-    nav ul.menu li a {
-      text-decoration: none;
-      color: #333;
-      font-weight: 500;
-    }
-
-    .portal-container {
-      max-width: 800px;
-      margin: 60px auto;
-      background: #fff;
-      padding: 40px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-      border-radius: 12px;
-    }
-
-    .portal-header {
-      text-align: center;
-      font-family: 'Playfair Display', serif;
-      font-size: 2.2rem;
-      margin-bottom: 10px;
-      color: #8c5e3c;
-    }
-
-    .form-card h2 {
-      margin-bottom: 20px;
-      color: #444;
-    }
-
-    form label {
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
-    }
-
-    form input, form select, form textarea {
-      width: 100%;
-      padding: 10px;
-      margin-top: 6px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1rem;
-    }
-
-    .gold-button {
-      background: linear-gradient(to right, #b89d70, #d4af7f);
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      font-size: 1rem;
-      border-radius: 8px;
-      margin-top: 25px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    .gold-button:hover {
-      background: linear-gradient(to right, #a88c4d, #c19a66);
-    }
-
-    footer {
-      text-align: center;
-      padding: 30px 0;
-      font-size: 0.9rem;
-      color: #777;
-      background-color: #f5f5f5;
-      margin-top: 60px;
-    }
-  </style>
 </head>
 <body>
   <header>
@@ -137,30 +26,20 @@
 
   <section class="portal-container">
     <h1 class="portal-header">Book a Luxury Event</h1>
-    <p style="text-align:center; margin-bottom: 30px; color: #555;">Let us know your vision, and we'll bring it to life with elegance and perfection.</p>
+    <p style="text-align:center; margin: 1rem 0; color: #ddd;">
+      Let us know your vision, and we'll bring it to life with elegance and perfection.
+    </p>
 
-<<form action="https://formspree.io/f/{form_id}" method="post">
-  <label for="email">Your Email</label>
-  <input name="Email" id="email" type="email">
-  <button type="submit">Submit</button>
-</form>
+    <form id="orderForm" action="https://formspree.io/f/mldlwgvl" method="POST">
+  <label for="fullName">Full Name*</label>
+  <input type="text" id="fullName" name="fullName" required />
 
-<!-- Success message (initially hidden) -->
-<div id="formMessage" class="hidden success-message">
-  Thank you! Your booking was successfully submitted.
-</div>
+  <label for="email">Email Address*</label>
+  <input type="email" id="email" name="email" required />
 
-    <h2>Order Form</h2>
-
-      <label for="fullName">Full Name*</label>
-      <input type="text" id="fullName" name="fullName" required />
-
-      <label for="email">Email Address*</label>
-      <input type="email" id="email" name="email" required />
-
-      <label for="phone">Phone Number*</label>
-      <input type="tel" id="phone" name="phone" required />
-
+  <label for="phone">Phone Number*</label>
+  <input type="tel" id="phone" name="phone" required />
+  
       <label for="service">Select Service*</label>
       <select id="service" name="service" required>
         <option value="">-- Choose an option --</option>
@@ -179,41 +58,39 @@
       <textarea id="details" name="details" rows="4" placeholder="Tell us more about your theme or preferences..."></textarea>
 
       <input type="hidden" name="_captcha" value="false">
-
       <button type="submit" class="gold-button">Submit Order</button>
     </form>
+
+    <div id="formMessage" class="hidden success-message"></div>
   </section>
 
   <footer>
     <p>&copy; 2025 Rapad Opulent Affairs. All rights reserved.</p>
   </footer>
-<script>
-document.getElementById('orderForm').addEventListener('submit', async function(e) {
-  e.preventDefault(); // Prevent default redirect
-  const form = e.target;
-  const data = new FormData(form);
 
-  const response = await fetch(form.action, {
-    method: form.method,
-    body: data,
-    headers: {
-      'Accept': 'application/json'
-    }
-  });
+  <script>
+    document.getElementById('orderForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = new FormData(form);
+      const messageEl = document.getElementById('formMessage');
 
-  const messageEl = document.getElementById('formMessage');
+      const response = await fetch(form.action, {
+        method: form.method,
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
 
-  if (response.ok) {
-    form.reset();
-    messageEl.textContent = "Thank you! Your booking was successfully submitted.";
-    messageEl.classList.remove('hidden');
-    messageEl.classList.add('fade-in');
-  } else {
-    messageEl.textContent = "Oops! Something went wrong. Please try again.";
-    messageEl.classList.remove('hidden');
-  }
-});
-</script>
-
+      if (response.ok) {
+        form.reset();
+        messageEl.textContent = "Thank you! Your booking was successfully submitted.";
+        messageEl.classList.remove('hidden');
+        messageEl.classList.add('fade-in');
+      } else {
+        messageEl.textContent = "Oops! Something went wrong. Please try again.";
+        messageEl.classList.remove('hidden');
+      }
+    });
+  </script>
 </body>
 </html>

@@ -30,36 +30,37 @@
       Let us know your vision, and we'll bring it to life with elegance and perfection.
     </p>
 
-    <form id="orderForm" action="https://formspree.io/f/mldlwgvl" method="POST">
+  <form id="orderForm" action="https://formspree.io/f/mldlwgvl" method="POST">
   <label for="fullName">Full Name*</label>
-  <input type="text" id="fullName" name="fullName" required />
+  <input type="text" id="fullName" name="fullName" placeholder="John Doe" required />
 
   <label for="email">Email Address*</label>
-  <input type="email" id="email" name="email" required />
+  <input type="email" id="email" name="email" placeholder="you@example.com" required />
 
   <label for="phone">Phone Number*</label>
-  <input type="tel" id="phone" name="phone" required />
-  
-      <label for="service">Select Service*</label>
-      <select id="service" name="service" required>
-        <option value="">-- Choose an option --</option>
-        <option value="Wedding Planning">Luxury Wedding Planning</option>
-        <option value="Corporate Event">Corporate & VIP Events</option>
-        <option value="Themed Celebration">Themed Celebrations & Décor</option>
-      </select>
+  <input type="tel" id="phone" name="phone" placeholder="e.g. +254712345678" required />
 
-      <label for="eventDate">Preferred Event Date*</label>
-      <input type="date" id="eventDate" name="eventDate" required />
+  <label for="service">Select Service*</label>
+  <select id="service" name="service" required>
+    <option value="" disabled selected>-- Choose an option --</option>
+    <option value="Wedding Planning">Luxury Wedding Planning</option>
+    <option value="Corporate Event">Corporate & VIP Events</option>
+    <option value="Themed Celebration">Themed Celebrations & Décor</option>
+  </select>
 
-      <label for="location">Event Location*</label>
-      <input type="text" id="location" name="location" required />
+  <label for="eventDate">Preferred Event Date*</label>
+  <input type="date" id="eventDate" name="eventDate" required />
 
-      <label for="details">Additional Details</label>
-      <textarea id="details" name="details" rows="4" placeholder="Tell us more about your theme or preferences..."></textarea>
+  <label for="location">Event Location*</label>
+  <input type="text" id="location" name="location" placeholder="Nairobi, Kenya" required />
 
-      <input type="hidden" name="_captcha" value="false">
-      <button type="submit" class="gold-button">Submit Order</button>
-    </form>
+  <label for="details">Additional Details</label>
+  <textarea id="details" name="details" rows="4" placeholder="Tell us more about your theme or preferences..."></textarea>
+
+  <input type="hidden" name="_captcha" value="false">
+  <button type="submit" class="gold-button">Submit Order</button>
+</form>
+
 
     <div id="formMessage" class="hidden success-message"></div>
   </section>

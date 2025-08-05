@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Employee Portal | Rapad Opulent Affairs</title>
+  <title>Register | Rapad Opulent Affairs</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Open+Sans&display=swap" rel="stylesheet">
 </head>
@@ -19,27 +19,29 @@
         <li><a href="index.html#services">Services</a></li>
         <li><a href="index.html#contact">Contact</a></li>
         <li><a href="orders.html">Book Now</a></li>
-        <li><a href="employee-portal.html" class="active">Employee Portal</a></li>
+        <li><a href="employee-portal.html">Employee Portal</a></li>
       </ul>
     </nav>
   </header>
 
   <section class="portal-container">
-    <h1 class="portal-header">Employee Login</h1>
+    <h1 class="portal-header">Employee Registration</h1>
     
     <form action="#" method="POST" class="employee-form">
+      <label for="name">Full Name*</label>
+      <input type="text" id="name" name="name" required placeholder="e.g. Jane Doe" />
+
       <label for="email">Email Address*</label>
-      <input type="email" id="email" name="email" required placeholder="e.g. staff@rapad.com" />
+      <input type="email" id="email" name="email" required placeholder="e.g. jane@rapad.com" />
 
-      <label for="password">Password*</label>
-      <input type="password" id="password" name="password" required placeholder="Enter your password" />
+      <label for="position">Position/Role*</label>
+      <input type="text" id="position" name="position" required placeholder="e.g. Event Manager" />
 
-      <button type="submit" class="gold-button">Login</button>
+      <label for="password">Create Password*</label>
+      <input type="password" id="password" name="password" required placeholder="Create a secure password" />
+
+      <button type="submit" class="gold-button">Register</button>
     </form>
-
-    <p style="text-align:center; margin-top: 1rem;">
-      Don't have an account? <a href="employee-register.html">Register here</a>
-    </p>
   </section>
 
   <footer>
@@ -70,19 +72,32 @@
 </script>
 <script>
   const auth = firebase.auth();
+  const db = firebase.firestore();
 
   document.querySelector("form").addEventListener("submit", async (e) => {
     e.preventDefault();
 
+    const name = document.getElementById("name").value;
     const email = document.getElementById("email").value;
+    const position = document.getElementById("position").value;
     const password = document.getElementById("password").value;
 
     try {
-      await auth.signInWithEmailAndPassword(email, password);
-      alert("Login successful!");
-      window.location.href = "dashboard.html"; // or admin.html
+      const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+      const user = userCredential.user;
+
+      // Store extra info in Firestore
+      await db.collection("employees").doc(user.uid).set({
+        name,
+        email,
+        position,
+        createdAt: new Date()
+      });
+
+      alert("Registration successful!");
+      window.location.href = "employee-portal.html"; // redirect to login
     } catch (error) {
-      alert("Login failed: " + error.message);
+      alert("Error: " + error.message);
     }
   });
 </script>

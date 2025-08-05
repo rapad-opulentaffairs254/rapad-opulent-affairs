@@ -471,3 +471,51 @@ form textarea {
     width: 30px;
   }
 }
+body {
+  background-color: #000;
+  color: gold;
+  font-family: 'Open Sans', sans-serif;
+}
+
+header, .portal-container, footer {
+  background-color: #111;
+  color: gold;
+}
+
+.portal-container {
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: bold;
+  color: gold;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 0.5rem;
+  border: 1px solid gold;
+  border-radius: 5px;
+  background-color: #222;
+  color: #fff;
+}
+
+button.gold-button {
+  margin-top: 1.5rem;
+  padding: 10px 20px;
+  background-color: gold;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button.gold-button:hover {
+  background-color: #e6be00;
+}

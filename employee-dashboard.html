@@ -5,7 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Employee Dashboard - Rapad Opulent Affairs</title>
   <link rel="stylesheet" href="style.css" />
-  <script type="module" src="main.js"></script>
+  <style>
+    /* Make logout button smaller */
+    #logoutBtn {
+      padding: 6px 12px;
+      font-size: 0.9rem;
+    }
+
+    /* Responsive tab styling (optional if in style.css) */
+    .tab-btn {
+      cursor: pointer;
+      padding: 10px 16px;
+      border: none;
+      background-color: #444;
+      color: white;
+      margin-right: 5px;
+      border-radius: 4px;
+      transition: 0.3s;
+    }
+
+    .tab-btn.active {
+      background-color: gold;
+      color: black;
+    }
+
+    .tab-content {
+      display: none;
+      margin-top: 1rem;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+  </style>
 </head>
 <body>
   <header class="portal-header">
@@ -15,26 +47,11 @@
 
   <main class="portal-container">
     <nav class="tabs-nav">
-      <button class="tab-btn active" data-tab="profileTab">Update Profile</button>
-      <button class="tab-btn" data-tab="reportTab">Submit Report</button>
+      <button class="tab-btn active" data-tab="reportTab">Submit Report</button>
       <button class="tab-btn" data-tab="tasksTab">Tasks & Schedules</button>
     </nav>
 
-    <section id="profileTab" class="tab-content active">
-      <h2>Update Profile</h2>
-      <form id="profileForm">
-        <label for="displayName">Full Name</label>
-        <input type="text" id="displayName" name="displayName" placeholder="Enter your full name" required />
-
-        <label for="phoneNumber">Phone Number</label>
-        <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Enter your phone number" />
-
-        <button type="submit" class="gold-button">Save Profile</button>
-      </form>
-      <div id="profileMsg"></div>
-    </section>
-
-    <section id="reportTab" class="tab-content">
+    <section id="reportTab" class="tab-content active">
       <h2>Submit Report</h2>
       <form id="reportForm">
         <label for="reportText">Report Details</label>
@@ -49,5 +66,51 @@
       <div id="tasksList">Loading tasks...</div>
     </section>
   </main>
+
+  <!-- Firebase + Auth + Logout + Tabs Logic -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // 🔐 Redirect if not logged in
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "employee-portal.html";
+      }
+    });
+
+    // 🚪 Logout button
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      signOut(auth).then(() => {
+        window.location.href = "employee-portal.html";
+      });
+    });
+
+    // 🔁 Tab functionality
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Remove active from all
+        tabButtons.forEach(b => b.classList.remove('active'));
+        tabContents.forEach(tab => tab.classList.remove('active'));
+
+        // Add to current
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+      });
+    });
+  </script>
 </body>
 </html>

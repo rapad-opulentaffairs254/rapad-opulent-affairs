@@ -85,6 +85,15 @@
       alert("Login failed: " + error.message);
     }
   });
+  signInWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    // ✅ Successful login
+    window.location.href = "employee-dashboard.html"; // 🔁 Redirect here
+  })
+  .catch((error) => {
+    console.error(error);
+    alert("Invalid credentials. Please try again.");
+  });
 </script>
 </body>
 </html>

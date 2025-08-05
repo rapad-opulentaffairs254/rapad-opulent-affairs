@@ -45,15 +45,10 @@
   <footer>
     <p>&copy; 2025 Rapad Opulent Affairs. All rights reserved.</p>
   </footer>
-  <script type="module">
-  // Import the functions you need from the SDKs you need
+   <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
   const firebaseConfig = {
     apiKey: "AIzaSyCCZ5h5moCnPdVq6zXQYHhx7FcUsZHnhgk",
     authDomain: "rapad-employee-portal.firebaseapp.com",
@@ -64,12 +59,8 @@
     measurementId: "G-L54YK0VXC8"
   };
 
-  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
-<script>
-  const auth = firebase.auth();
+  const auth = getAuth(app);
 
   document.querySelector("form").addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -78,22 +69,14 @@
     const password = document.getElementById("password").value;
 
     try {
-      await auth.signInWithEmailAndPassword(email, password);
+      await signInWithEmailAndPassword(auth, email, password);
       alert("Login successful!");
-      window.location.href = "dashboard.html"; // or admin.html
+      window.location.href = "employee-dashboard.html"; // ✅ Make sure this file exists and is correctly named
     } catch (error) {
       alert("Login failed: " + error.message);
     }
   });
-  signInWithEmailAndPassword(auth, email, password)
-  .then((userCredential) => {
-    // ✅ Successful login
-    window.location.href = "employee-dashboard.html"; // 🔁 Redirect here
-  })
-  .catch((error) => {
-    console.error(error);
-    alert("Invalid credentials. Please try again.");
-  });
 </script>
+
 </body>
 </html>

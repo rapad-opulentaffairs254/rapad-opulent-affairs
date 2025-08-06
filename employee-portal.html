@@ -74,7 +74,7 @@
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      const userRef = doc(db, "employees", user.uid);
+      const userRef = doc(db, "users", user.uid); // points to existing data
       const docSnap = await getDoc(userRef);
 
       if (docSnap.exists()) {

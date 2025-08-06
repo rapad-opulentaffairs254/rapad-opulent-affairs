@@ -45,15 +45,16 @@
   <footer>
     <p>&copy; 2025 Rapad Opulent Affairs. All rights reserved.</p>
   </footer>
-   <script type="module">
+  <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+  import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyCCZ5h5moCnPdVq6zXQYHhx7FcUsZHnhgk",
     authDomain: "rapad-employee-portal.firebaseapp.com",
     projectId: "rapad-employee-portal",
-    storageBucket: "rapad-employee-portal.firebasestorage.app",
+    storageBucket: "rapad-employee-portal.appspot.com",
     messagingSenderId: "276746044900",
     appId: "1:276746044900:web:4cf1ab62c98ba85d5c33f1",
     measurementId: "G-L54YK0VXC8"
@@ -61,6 +62,7 @@
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
+  const db = getFirestore(app); // Initialize Firestore properly
 
   document.querySelector("form").addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -69,9 +71,26 @@
     const password = document.getElementById("password").value;
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      alert("Login successful!");
-      window.location.href = "employee-dashboard.html"; // ✅ Make sure this file exists and is correctly named
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      const userRef = doc(db, "employees", user.uid);
+      const docSnap = await getDoc(userRef);
+
+      if (docSnap.exists()) {
+        const userData = docSnap.data();
+
+        if (userData.approved) {
+          alert("Login successful!");
+          window.location.href = "dashboard.html";
+        } else {
+          alert("Your account is awaiting admin approval.");
+          await signOut(auth); // logout
+        }
+      } else {
+        alert("User data not found.");
+        await signOut(auth);
+      }
     } catch (error) {
       alert("Login failed: " + error.message);
     }

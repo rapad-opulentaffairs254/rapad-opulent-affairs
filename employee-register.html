@@ -94,6 +94,15 @@
         alert("Error: " + error.message);
       }
     });
+
+    await db.collection("employees").doc(user.uid).set({
+  name,
+  email,
+  position,
+  approved: false, // set this explicitly
+  createdAt: new Date()
+});
+
   </script>
 </body>
 </html>

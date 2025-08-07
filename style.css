@@ -44,6 +44,8 @@ nav ul.menu {
   list-style: none;
   display: flex;
   gap: 20px;
+  color: gold;
+  color: white;
 }
 
 nav a {

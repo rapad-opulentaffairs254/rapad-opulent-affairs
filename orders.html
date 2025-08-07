@@ -19,6 +19,7 @@
     &#9776;
   </div>
 
+  <nav>
        <ul class="menu" id="menu">
         <li><a href="index.html">Home</a></li>
         <li><a href="index.html#services">Services</a></li>
@@ -26,6 +27,7 @@
         <li><a href="orders.html">Book Now</a></li>
         <li><a href="employee-portal.html">Employee Portal</a></li>
       </ul>
+      </nav>
   </header>
 
   <section class="portal-container">
@@ -34,7 +36,12 @@
       Let us know your vision, and we'll bring it to life with elegance and perfection.
     </p>
 
-  <form id="orderForm" action="https://formspree.io/f/mldlwgvl" method="POST">
+  <form name="orderForm" method="POST" netlify netlify-honeypot="bot-field" action="/thank-you.html">
+  <input type="hidden" name="form-name" value="orderForm" />
+  <p class="hidden">
+    <label>Don’t fill this out: <input name="bot-field" /></label>
+  </p>
+
   <label for="fullName">Full Name*</label>
   <input type="text" id="fullName" name="fullName" placeholder="John Doe" required />
 
@@ -61,7 +68,6 @@
   <label for="details">Additional Details</label>
   <textarea id="details" name="details" rows="4" placeholder="Tell us more about your theme or preferences..."></textarea>
 
-  <input type="hidden" name="_captcha" value="false">
   <button type="submit" class="gold-button">Submit Order</button>
 </form>
 
@@ -72,31 +78,6 @@
   <footer>
     <p>&copy; 2025 Rapad Opulent Affairs. All rights reserved.</p>
   </footer>
-
-  <script>
-    document.getElementById('orderForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      const form = e.target;
-      const data = new FormData(form);
-      const messageEl = document.getElementById('formMessage');
-
-      const response = await fetch(form.action, {
-        method: form.method,
-        body: data,
-        headers: { 'Accept': 'application/json' }
-      });
-
-      if (response.ok) {
-        form.reset();
-        messageEl.textContent = "Thank you! Your booking was successfully submitted.";
-        messageEl.classList.remove('hidden');
-        messageEl.classList.add('fade-in');
-      } else {
-        messageEl.textContent = "Oops! Something went wrong. Please try again.";
-        messageEl.classList.remove('hidden');
-      }
-    });
-  </script>
 
    <!-- Hamburger toggle logic in separate script -->
   <script>

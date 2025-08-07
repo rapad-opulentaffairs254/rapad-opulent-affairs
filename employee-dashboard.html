@@ -46,64 +46,173 @@
   </header>
 
   <main class="portal-container">
-    <nav class="tabs-nav">
-      <button class="tab-btn active" data-tab="reportTab">Submit Report</button>
-      <button class="tab-btn" data-tab="tasksTab">Tasks & Schedules</button>
-    </nav>
+  <nav class="tabs-nav">
+    <button class="tab-btn active" data-tab="reportTab">Submit Report</button>
+    <button class="tab-btn" data-tab="leaveTab">Request Leave/Off</button>
+    <button class="tab-btn" data-tab="tasksTab">Tasks & Schedules</button>
+    <button class="tab-btn" data-tab="detailsTab">My Details</button>
+  </nav>
 
-    <section id="reportTab" class="tab-content active">
-      <h2>Submit Report</h2>
-      <form id="reportForm">
-        <label for="reportText">Report Details</label>
-        <textarea id="reportText" name="reportText" rows="5" placeholder="Write your report here..." required></textarea>
-        <button type="submit" class="gold-button">Submit Report</button>
-      </form>
-      <div id="reportMsg"></div>
-    </section>
+  <!-- Report Tab -->
+  <section id="reportTab" class="tab-content active">
+    <h2>Submit Report</h2>
+    <form id="reportForm">
+      <label for="reportText">Report Details</label>
+      <textarea id="reportText" rows="5" required></textarea>
+      <button type="submit" class="gold-button">Submit Report</button>
+    </form>
+    <div id="reportMsg"></div>
+  </section>
 
-    <section id="tasksTab" class="tab-content">
-      <h2>Your Tasks & Schedules</h2>
-      <div id="tasksList">Loading tasks...</div>
-    </section>
-  </main>
+  <!-- Leave Tab -->
+  <section id="leaveTab" class="tab-content">
+    <h2>Request Leave/Off</h2>
+    <form id="leaveForm">
+      <label for="leaveType">Type of Leave/Off</label>
+      <select id="leaveType" required>
+        <option value="">Select Type</option>
+        <option value="Annual Leave">Annual Leave</option>
+        <option value="Sick Leave">Sick Leave</option>
+        <option value="Emergency Leave">Emergency Leave</option>
+        <option value="Off Day">Off Day</option>
+      </select>
 
-  <!-- Firebase + Auth + Logout + Tabs Logic -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+      <label for="leaveDate">Select Date</label>
+      <input type="date" id="leaveDate" required />
 
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_AUTH_DOMAIN",
-      projectId: "YOUR_PROJECT_ID",
-      appId: "YOUR_APP_ID"
-    };
+      <label for="leaveReason">Reason</label>
+      <textarea id="leaveReason" rows="4" required></textarea>
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+      <button type="submit" class="gold-button">Submit Request</button>
+    </form>
+    <div id="leaveMsg"></div>
+  </section>
 
-    // 🚪 Logout button
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      signOut(auth).then(() => {
-        window.location.href = "employee-portal.html";
+  <!-- Tasks Tab -->
+  <section id="tasksTab" class="tab-content">
+    <h2>Your Tasks & Schedules</h2>
+    <div id="tasksList">Loading...</div>
+  </section>
+
+  <!-- Details Tab -->
+  <section id="detailsTab" class="tab-content">
+    <h2>My Details</h2>
+    <div id="userDetails">Loading your info...</div>
+  </section>
+</main>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getFirestore, doc, getDoc, collection, addDoc, query, where, getDocs, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  const logoutBtn = document.getElementById("logoutBtn");
+  logoutBtn.addEventListener("click", () => {
+    signOut(auth).then(() => window.location.href = "employee-portal.html");
+  });
+
+  // Tabs
+  const tabButtons = document.querySelectorAll(".tab-btn");
+  const tabContents = document.querySelectorAll(".tab-content");
+  tabButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      tabButtons.forEach(b => b.classList.remove("active"));
+      tabContents.forEach(t => t.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById(btn.dataset.tab).classList.add("active");
+    });
+  });
+
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) return (window.location.href = "employee-portal.html");
+
+    const userDoc = await getDoc(doc(db, "employees", user.uid));
+    if (!userDoc.exists() || !userDoc.data().approved) {
+      alert("You are not approved yet.");
+      return signOut(auth).then(() => window.location.href = "employee-portal.html");
+    }
+
+    const { name, email, position } = userDoc.data();
+    document.getElementById("userDetails").innerHTML = `
+      <p><strong>Name:</strong> ${name}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Position:</strong> ${position}</p>
+    `;
+
+    // Submit Report
+    document.getElementById("reportForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const text = document.getElementById("reportText").value;
+      await addDoc(collection(db, "reports"), {
+        userId: user.uid,
+        name,
+        text,
+        createdAt: new Date()
       });
+      document.getElementById("reportMsg").innerText = "✅ Report submitted.";
+      e.target.reset();
     });
 
-    // 🔁 Tab functionality
-    const tabButtons = document.querySelectorAll('.tab-btn');
-    const tabContents = document.querySelectorAll('.tab-content');
+    // Request Leave
+    document.getElementById("leaveForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const type = document.getElementById("leaveType").value;
+      const date = document.getElementById("leaveDate").value;
+      const reason = document.getElementById("leaveReason").value;
 
-    tabButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        // Remove active from all
-        tabButtons.forEach(b => b.classList.remove('active'));
-        tabContents.forEach(tab => tab.classList.remove('active'));
-
-        // Add to current
-        btn.classList.add('active');
-        document.getElementById(btn.dataset.tab).classList.add('active');
+      await addDoc(collection(db, "leaveRequests"), {
+        userId: user.uid,
+        name,
+        type,
+        date,
+        reason,
+        status: "Pending",
+        createdAt: new Date()
       });
+
+      document.getElementById("leaveMsg").innerText = "📅 Leave/Off request submitted.";
+      e.target.reset();
     });
-  </script>
+
+    // Load Tasks
+    const taskQuery = query(collection(db, "tasks"), where("userId", "==", user.uid));
+    const taskSnapshot = await getDocs(taskQuery);
+    const tasksList = document.getElementById("tasksList");
+    tasksList.innerHTML = "";
+
+    taskSnapshot.forEach(docSnap => {
+      const data = docSnap.data();
+      const div = document.createElement("div");
+      div.innerHTML = `
+        <p><strong>${data.title}</strong><br>${data.details}<br>
+        Status: ${data.completed ? "✅ Done" : "❌ Pending"}
+        ${!data.completed ? `<button data-id="${docSnap.id}" class="markDoneBtn">Mark as Done</button>` : ""}
+        </p><hr>
+      `;
+      tasksList.appendChild(div);
+    });
+
+    // Mark as done
+    tasksList.addEventListener("click", async (e) => {
+      if (e.target.classList.contains("markDoneBtn")) {
+        const id = e.target.dataset.id;
+        await updateDoc(doc(db, "tasks", id), { completed: true });
+        location.reload();
+      }
+    });
+  });
+</script>
+
 </body>
 </html>

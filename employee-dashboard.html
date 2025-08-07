@@ -106,46 +106,52 @@
 </main>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-  import { getFirestore, doc, getDoc, collection, addDoc, query, where, getDocs, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, getDoc, collection, addDoc, query, where, getDocs, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    appId: "YOUR_APP_ID"
-  };
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  appId: "YOUR_APP_ID"
+};
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-  // Logout
-  document.getElementById("logoutBtn").addEventListener("click", () => {
-    signOut(auth).then(() => window.location.href = "employee-portal.html");
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  signOut(auth).then(() => window.location.href = "employee-portal.html");
+});
+
+// Tab switching
+const tabButtons = document.querySelectorAll(".tab-btn");
+const tabContents = document.querySelectorAll(".tab-content");
+tabButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    tabButtons.forEach(b => b.classList.remove("active"));
+    tabContents.forEach(t => t.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById(btn.dataset.tab).classList.add("active");
   });
+});
 
-  // Tab switching
-  const tabButtons = document.querySelectorAll(".tab-btn");
-  const tabContents = document.querySelectorAll(".tab-content");
-  tabButtons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      tabButtons.forEach(b => b.classList.remove("active"));
-      tabContents.forEach(t => t.classList.remove("active"));
-      btn.classList.add("active");
-      document.getElementById(btn.dataset.tab).classList.add("active");
-    });
-  });
-
+// Wait for auth
 onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    window.location.href = "employee-portal.html";
+    return;
+  }
 
-    // Load My Details
-    const userDocRef = doc(db, "users", user.uid);
-    const userDocSnap = await getDoc(userDocRef);
+  try {
+    const userSnap = await getDoc(doc(db, "users", user.uid));
+    if (!userSnap.exists()) {
+      alert("Your profile was not found.");
+      return;
+    }
 
-
-    const { name, email, position } = userDocSnap.data();
+    const { name, email, position } = userSnap.data();
     document.getElementById("userDetails").innerHTML = `
       <p><strong>Name:</strong> ${name}</p>
       <p><strong>Email:</strong> ${email}</p>
@@ -155,15 +161,13 @@ onAuthStateChanged(auth, async (user) => {
     // Submit Report
     document.getElementById("reportForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const text = document.getElementById("reportText").value.trim();
-      if (!text) return;
-
       try {
+        const text = document.getElementById("reportText").value;
         await addDoc(collection(db, "reports"), {
           userId: user.uid,
           name,
           text,
-          createdAt: serverTimestamp()
+          createdAt: new Date()
         });
         document.getElementById("reportMsg").innerText = "✅ Report submitted.";
         e.target.reset();
@@ -173,42 +177,41 @@ onAuthStateChanged(auth, async (user) => {
       }
     });
 
-    // Request Leave (now with from/to dates)
+    // Request Leave (From–To dates)
     document.getElementById("leaveForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const type = document.getElementById("leaveType").value;
-      const fromDate = document.getElementById("leaveFromDate").value;
-      const toDate = document.getElementById("leaveToDate").value;
-      const reason = document.getElementById("leaveReason").value.trim();
-
-      if (!type || !fromDate || !toDate || !reason) return;
-
       try {
+        const type = document.getElementById("leaveType").value;
+        const startDate = document.getElementById("leaveFrom").value;
+        const endDate = document.getElementById("leaveTo").value;
+        const reason = document.getElementById("leaveReason").value;
+
         await addDoc(collection(db, "leaveRequests"), {
           userId: user.uid,
           name,
           type,
-          fromDate,
-          toDate,
+          startDate,
+          endDate,
           reason,
           status: "Pending",
-          createdAt: serverTimestamp()
+          createdAt: new Date()
         });
+
         document.getElementById("leaveMsg").innerText = "📅 Leave request submitted.";
         e.target.reset();
       } catch (err) {
-        console.error("Error requesting leave:", err);
-        document.getElementById("leaveMsg").innerText = "❌ Failed to request leave.";
+        console.error("Error submitting leave request:", err);
+        document.getElementById("leaveMsg").innerText = "❌ Failed to submit request.";
       }
     });
 
     // Load Tasks
     const taskQuery = query(collection(db, "tasks"), where("userId", "==", user.uid));
-    const taskSnapshot = await getDocs(taskQuery);
+    const taskSnap = await getDocs(taskQuery);
     const tasksList = document.getElementById("tasksList");
     tasksList.innerHTML = "";
 
-    taskSnapshot.forEach(docSnap => {
+    taskSnap.forEach(docSnap => {
       const data = docSnap.data();
       const div = document.createElement("div");
       div.innerHTML = `
@@ -220,7 +223,7 @@ onAuthStateChanged(auth, async (user) => {
       tasksList.appendChild(div);
     });
 
-    // Mark task as done
+    // Mark as done
     tasksList.addEventListener("click", async (e) => {
       if (e.target.classList.contains("markDoneBtn")) {
         const id = e.target.dataset.id;
@@ -228,8 +231,13 @@ onAuthStateChanged(auth, async (user) => {
         location.reload();
       }
     });
-  });
+
+  } catch (err) {
+    console.error("Error loading dashboard:", err);
+  }
+});
 </script>
+
 
 
 </body>

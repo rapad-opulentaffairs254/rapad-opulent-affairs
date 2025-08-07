@@ -58,15 +58,13 @@ nav a {
   border-radius: 5px;
 }
 
-/* Hide hamburger by default */
+/* Desktop styles */
 .menu-toggle {
   display: none;
   font-size: 2rem;
   cursor: pointer;
-  padding: 1rem;
 }
 
-/* Default menu style */
 .menu {
   display: flex;
   gap: 1.5rem;
@@ -77,27 +75,52 @@ nav a {
 @media screen and (max-width: 768px) {
   .menu-toggle {
     display: block;
+    color: #FFD700; /* Gold icon */
+    padding: 1rem;
   }
 
   .menu {
     display: none;
     flex-direction: column;
-    background-color: white;
+    background-color: #000; /* Black background */
     position: absolute;
     top: 70px;
     right: 20px;
-    width: 200px;
-    border: 1px solid #ccc;
+    width: 220px;
+    border: 1px solid #FFD700; /* Gold border */
     padding: 1rem;
     z-index: 1000;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease-in-out;
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
   }
 
   .menu.show-mobile {
     display: flex;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .menu li {
+    margin-bottom: 10px;
+  }
+
+  .menu li a {
+    text-decoration: none;
+    color: #FFD700;
+    font-weight: bold;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: color 0.3s ease;
+  }
+
+  .menu li a:hover {
+    color: #fff;
   }
 }
-
-
 
 /* ========== Hero Section ========== */
 .hero {

@@ -144,10 +144,6 @@ onAuthStateChanged(auth, async (user) => {
     const userDocRef = doc(db, "users", user.uid);
     const userDocSnap = await getDoc(userDocRef);
 
-    if (!userDocSnap.exists() || !userDocSnap.data().approved) {
-      alert("You are not approved yet.");
-      return
-    }
 
     const { name, email, position } = userDocSnap.data();
     document.getElementById("userDetails").innerHTML = `

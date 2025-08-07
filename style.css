@@ -58,63 +58,46 @@ nav a {
   border-radius: 5px;
 }
 
-/* ========== Hamburger Menu ========== */
-.hamburger {
+/* Hide hamburger by default */
+.menu-toggle {
   display: none;
   font-size: 2rem;
-  color: gold;
   cursor: pointer;
+  padding: 1rem;
 }
 
-#menu-toggle {
-  display: none;
-}
-.menu-toggle {
-  font-size: 30px;
-  cursor: pointer;
-  display: block;
-}
-
-#mobile-menu.hidden {
-  display: none;
-}
-
-#mobile-menu {
-  background-color: black;
-  padding: 10px;
-}
-
-#mobile-menu ul {
+/* Default menu style */
+.menu {
+  display: flex;
+  gap: 1.5rem;
   list-style: none;
-  padding: 0;
 }
 
-#mobile-menu li {
-  margin: 10px 0;
-}
-
-
-@media (max-width: 768px) {
-  .hamburger {
+/* Mobile styles */
+@media screen and (max-width: 768px) {
+  .menu-toggle {
     display: block;
   }
 
-  nav ul.menu {
+  .menu {
     display: none;
     flex-direction: column;
-    gap: 10px;
+    background-color: white;
     position: absolute;
-    top: 60px;
+    top: 70px;
     right: 20px;
-    background: black;
+    width: 200px;
+    border: 1px solid #ccc;
     padding: 1rem;
-    border-radius: 8px;
+    z-index: 1000;
   }
 
-  #menu-toggle:checked + .hamburger + ul.menu {
+  .menu.show-mobile {
     display: flex;
   }
 }
+
+
 
 /* ========== Hero Section ========== */
 .hero {

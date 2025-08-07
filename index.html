@@ -7,38 +7,29 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <div class="brand">
-      <img src="images/logo.png" alt="Rapad Logo" />
-      <span class="company-name">Rapad Opulent Affairs</span>
-    </div>
-    <nav>
-      <input type="checkbox" id="menu-toggle" />
-      <!-- Hamburger icon -->
-<div class="menu-toggle" id="menu-toggle">
-  &#9776; <!-- This is the ☰ symbol -->
-</div>
+<header>
+  <div class="brand">
+    <img src="images/logo.png" alt="Rapad Logo" />
+    <span class="company-name">Rapad Opulent Affairs</span>
+  </div>
 
-<!-- Mobile Menu -->
-<nav id="mobile-menu" class="hidden">
-  <ul>
-    <li><a href="#home">Home</a></li>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="orders.html">Book Now</a></li>
-  </ul>
-</nav>
+  <!-- Hamburger icon -->
+  <div class="menu-toggle" id="menu-toggle">
+    &#9776;
+  </div>
 
-      <ul class="menu">
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Our Services</a></li>
-        <li><a href="#">About Us</a></li>
-        <li><a href="#contact">Contact Us</a></li>
-        <a href="orders.html">Book Now</a></li>
-        <li><a href="employee-portal.html" class="employee-portal">Employee Portal</a></li>
-      </ul>
-    </nav>
-  </header>
+  <!-- Navigation Menu -->
+  <nav>
+    <ul class="menu" id="main-menu">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Our Services</a></li>
+      <li><a href="#">About Us</a></li>
+      <li><a href="#contact">Contact Us</a></li>
+      <li><a href="orders.html">Book Now</a></li>
+      <li><a href="employee-portal.html" class="employee-portal">Employee Portal</a></li>
+    </ul>
+  </nav>
+</header>
 
   <section class="hero fade-in">
     <div class="hero-text">
@@ -81,10 +72,12 @@
   </footer>
 
   <script type="module" src="main.js"></script>
-  <script>
-  document.getElementById('menu-toggle').addEventListener('click', function () {
-    var menu = document.getElementById('mobile-menu');
-    menu.classList.toggle('hidden');
+ <script>
+  const toggle = document.getElementById('menu-menu-toggle');
+  const menu = document.getElementById('menu');
+
+  toggle.addEventListener('click', () => {
+    menu.classList.toggle('show-mobile');
   });
 </script>
 

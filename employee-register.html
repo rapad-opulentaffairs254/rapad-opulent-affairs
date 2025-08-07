@@ -37,8 +37,14 @@
       <label for="position">Position/Role*</label>
       <input type="text" id="position" name="position" required placeholder="e.g. Event Manager" />
 
+      <label for="role">Registering As*</label>
+<select id="role" name="role" required>
+  <option value="employee" selected>Employee</option>
+</select>
+
       <label for="password">Create Password*</label>
       <input type="password" id="password" name="password" required placeholder="Create a secure password" />
+
 
       <button type="submit" class="gold-button">Register</button>
     </form>
@@ -75,6 +81,8 @@
       const email = document.getElementById("email").value;
       const position = document.getElementById("position").value;
       const password = document.getElementById("password").value;
+      const role = document.getElementById("role").value; // should be "employee"
+
 
       try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -85,6 +93,7 @@
           name,
           email,
           position,
+          role, // "employee"
           approved: false,
           createdAt: serverTimestamp()
         });

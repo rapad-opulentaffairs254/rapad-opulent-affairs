@@ -86,16 +86,19 @@
       if (docSnap.exists()) {
         const userData = docSnap.data();
 
-        if (userData.approved) {
-          alert("Login successful!");
-          window.location.href = "dashboard.html";
-        } else {
-          alert("Your account is awaiting admin approval.");
-          await signOut(auth); // logout
-        }
-      } else {
-        alert("User data not found.");
-        await signOut(auth);
+      if (userData.approved) {
+  if (userData.role === "admin") {
+    alert("Welcome Admin!");
+    window.location.href = "admin-dashboard.html";
+  } else {
+    alert("Login successful!");
+    window.location.href = "employee-dashboard.html";
+  }
+} else {
+  alert("Your account is awaiting admin approval.");
+  await signOut(auth);
+}
+
       }
     } catch (error) {
       alert("Login failed: " + error.message);

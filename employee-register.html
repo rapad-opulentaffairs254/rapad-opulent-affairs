@@ -81,27 +81,20 @@
         const user = userCredential.user;
 
         // Store additional employee data
-        await setDoc(doc(db, "employees", user.uid), {
+        await setDoc(doc(db, "users", user.uid), {
           name,
           email,
           position,
+          approved: false,
           createdAt: serverTimestamp()
         });
 
-        alert("Registration successful!");
+        alert("Registration successful! Await admin approval.");
         window.location.href = "employee-portal.html"; // redirect to login page
       } catch (error) {
         alert("Error: " + error.message);
       }
     });
-
-    await db.collection("employees").doc(user.uid).set({
-  name,
-  email,
-  position,
-  approved: false, // set this explicitly
-  createdAt: new Date()
-});
 
   </script>
 </body>

@@ -30,7 +30,7 @@
         return;
       }
 
-      const docRef = doc(db, "employees", user.uid);
+      const docRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(docRef);
 
       if (!docSnap.exists() || docSnap.data().role !== "admin") {
@@ -40,7 +40,7 @@
       }
 
       // Load employees
-      const employeesSnapshot = await getDocs(collection(db, "employees"));
+      const employeesSnapshot = await getDocs(collection(db, "users"));
       const employeesList = document.getElementById("employeesList");
       employeesList.innerHTML = "";
 
@@ -59,7 +59,7 @@
       document.querySelectorAll(".approve-btn").forEach((btn) => {
         btn.addEventListener("click", async (e) => {
           const id = e.target.getAttribute("data-id");
-          await updateDoc(doc(db, "employees", id), { approved: true });
+          await updateDoc(doc(db, "users", id), { approved: true });
           alert("User approved!");
           location.reload();
         });

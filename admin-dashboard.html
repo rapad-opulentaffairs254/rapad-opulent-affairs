@@ -18,7 +18,8 @@ import {
   getDoc,
   collection,
   getDocs,
-  updateDoc
+  updateDoc,
+  addDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -159,6 +160,64 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
   await signOut(auth);
   window.location.href = "employee-portal.html";
 });
+</script>
+
+<script type="module">
+  // ... your Firebase setup remains
+
+  // Assign Schedule
+  document.getElementById("scheduleForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const userId = document.getElementById("employeeSelectSchedule").value;
+    const details = document.getElementById("scheduleDetails").value;
+
+    try {
+      await addDoc(collection(db, "schedules", userId, "entries"), {
+        details,
+        timestamp: new Date(),
+      });
+      document.getElementById("scheduleMsg").textContent = "✅ Schedule assigned!";
+    } catch (err) {
+      console.error("Error adding schedule:", err);
+      document.getElementById("scheduleMsg").textContent = "❌ Failed to assign schedule.";
+    }
+  });
+
+  // Assign Leave
+  document.getElementById("leaveForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const userId = document.getElementById("employeeSelectLeave").value;
+    const details = document.getElementById("leaveDetails").value;
+
+    try {
+      await addDoc(collection(db, "leaves", userId, "entries"), {
+        details,
+        timestamp: new Date(),
+      });
+      document.getElementById("leaveMsg").textContent = "✅ Leave submitted!";
+    } catch (err) {
+      console.error("Error adding leave:", err);
+      document.getElementById("leaveMsg").textContent = "❌ Failed to submit leave.";
+    }
+  });
+
+  // Assign Duty
+  document.getElementById("dutyForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const userId = document.getElementById("employeeSelectDuty").value;
+    const details = document.getElementById("dutyDetails").value;
+
+    try {
+      await addDoc(collection(db, "duties", userId, "entries"), {
+        details,
+        timestamp: new Date(),
+      });
+      document.getElementById("dutyMsg").textContent = "✅ Duty assigned!";
+    } catch (err) {
+      console.error("Error assigning duty:", err);
+      document.getElementById("dutyMsg").textContent = "❌ Failed to assign duty.";
+    }
+  });
 </script>
 
 

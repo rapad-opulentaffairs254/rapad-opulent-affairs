@@ -140,7 +140,7 @@
     const userDoc = await getDoc(doc(db, "employees", user.uid));
     if (!userDoc.exists() || !userDoc.data().approved) {
       alert("You are not approved yet.");
-      return signOut(auth).then(() => window.location.href = "employee-portal.html");
+      return signOut(auth).then(() => window.location.href = "employee-portal.html"); // remove
     }
 
     const { name, email, position } = userDoc.data();

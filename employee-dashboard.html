@@ -134,8 +134,6 @@
     });
   });
 
-  onAuthStateChanged(auth, async (user) => {
-    if (!user) return (window.location.href = "employee-portal.html");
 
     const userDoc = await getDoc(doc(db, "users", user.uid));
     if (!userDoc.exists() || !userDoc.data().approved) {
@@ -211,7 +209,6 @@
         location.reload();
       }
     });
-  });
 </script>
 
 </body>

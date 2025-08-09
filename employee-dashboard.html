@@ -139,6 +139,10 @@ tabButtons.forEach(btn => {
 
 // Wait for auth
 onAuthStateChanged(auth, async (user) => {
+if (!userDoc.exists() || !userDoc.data().approved || 
+    (userDoc.data().role !== "employee" && userDoc.data().role !== "admin")) {
+    }
+
 
     const { name, email, position } = userSnap.data();
     document.getElementById("userDetails").innerHTML = `

@@ -121,18 +121,16 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Logout button
+// Logout
 document.getElementById("logoutBtn").addEventListener("click", () => {
   signOut(auth).then(() => window.location.href = "employee-portal.html");
 });
 
-// Tab switching
-const tabButtons = document.querySelectorAll(".tab-btn");
-const tabContents = document.querySelectorAll(".tab-content");
-tabButtons.forEach(btn => {
+// Tabs
+document.querySelectorAll(".tab-btn").forEach(btn => {
   btn.addEventListener("click", () => {
-    tabButtons.forEach(b => b.classList.remove("active"));
-    tabContents.forEach(t => t.classList.remove("active"));
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
     btn.classList.add("active");
     document.getElementById(btn.dataset.tab).classList.add("active");
   });
@@ -141,116 +139,114 @@ tabButtons.forEach(btn => {
 // Auth listener
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
-    console.warn("⚠ No user signed in.");
+    console.warn("⚠ No user logged in.");
     return;
   }
 
-  try {
-    // Load user details from Firestore
-    const userRef = doc(db, "users", user.uid);
-    const userSnap = await getDoc(userRef);
+  console.log("✅ Logged in as:", user.uid);
 
-    if (!userSnap.exists()) {
-      console.warn("⚠ User document not found.");
-      return;
-    }
+  // Fetch user profile
+  const userRef = doc(db, "users", user.uid);
+  const userSnap = await getDoc(userRef);
 
-    const { name, email, position } = userSnap.data();
-    document.getElementById("userDetails").innerHTML = `
-      <p><strong>Name:</strong> ${name}</p>
-      <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Position:</strong> ${position}</p>
-    `;
+  if (!userSnap.exists()) {
+    console.error("❌ No user document found in Firestore for:", user.uid);
+    return;
+  }
 
-    // Submit Report
-    document.getElementById("reportForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      try {
-        const text = document.getElementById("reportText").value.trim();
-        if (!text) {
-          alert("Please enter a report before submitting.");
-          return;
-        }
-        await addDoc(collection(db, "reports"), {
-          userId: user.uid,
-          name,
-          text,
-          createdAt: new Date()
-        });
-        document.getElementById("reportMsg").innerText = "✅ Report submitted.";
-        e.target.reset();
-      } catch (err) {
-        console.error("❌ Error submitting report:", err);
-        document.getElementById("reportMsg").innerText = "❌ Failed to submit report.";
-      }
-    });
+  const { name, email, position } = userSnap.data();
+  document.getElementById("userDetails").innerHTML = `
+    <p><strong>Name:</strong> ${name}</p>
+    <p><strong>Email:</strong> ${email}</p>
+    <p><strong>Position:</strong> ${position}</p>
+  `;
 
-    // Request Leave (From–To dates)
-    document.getElementById("leaveForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      try {
-        const type = document.getElementById("leaveType").value;
-        const startDateVal = document.getElementById("leaveFrom").value;
-        const endDateVal = document.getElementById("leaveTo").value;
-        const reason = document.getElementById("leaveReason").value.trim();
+  // Submit Report
+  document.getElementById("reportForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const text = document.getElementById("reportText").value.trim();
+    if (!text) return alert("Please enter a report.");
 
-        if (!type || !startDateVal || !endDateVal || !reason) {
-          alert("Please fill in all fields.");
-          return;
-        }
-
-        await addDoc(collection(db, "leaveRequests"), {
-          userId: user.uid,
-          name,
-          type,
-          startDate: new Date(startDateVal),
-          endDate: new Date(endDateVal),
-          reason,
-          status: "Pending",
-          createdAt: new Date()
-        });
-
-        document.getElementById("leaveMsg").innerText = "📅 Leave request submitted.";
-        e.target.reset();
-      } catch (err) {
-        console.error("❌ Error submitting leave request:", err);
-        document.getElementById("leaveMsg").innerText = "❌ Failed to submit request.";
-      }
-    });
-
-    // Load Tasks
     try {
-      const taskQuery = query(collection(db, "tasks"), where("userId", "==", user.uid));
-      const taskSnap = await getDocs(taskQuery);
-      const tasksList = document.getElementById("tasksList");
-      tasksList.innerHTML = "";
-
-      taskSnap.forEach(docSnap => {
-        const data = docSnap.data();
-        const div = document.createElement("div");
-        div.innerHTML = `
-          <p><strong>${data.title}</strong><br>${data.details}<br>
-          Status: ${data.completed ? "✅ Done" : "❌ Pending"}
-          ${!data.completed ? `<button data-id="${docSnap.id}" class="markDoneBtn">Mark as Done</button>` : ""}
-          </p><hr>
-        `;
-        tasksList.appendChild(div);
+      console.log("📤 Sending report to Firestore...");
+      await addDoc(collection(db, "reports"), {
+        userId: user.uid,
+        name,
+        text,
+        createdAt: new Date()
       });
-
-      // Mark as done
-      tasksList.addEventListener("click", async (e) => {
-        if (e.target.classList.contains("markDoneBtn")) {
-          const id = e.target.dataset.id;
-          await updateDoc(doc(db, "tasks", id), { completed: true });
-          location.reload();
-        }
-      });
+      console.log("✅ Report submitted.");
+      document.getElementById("reportMsg").innerText = "✅ Report submitted.";
+      e.target.reset();
     } catch (err) {
-      console.error("❌ Error loading tasks:", err);
+      console.error("❌ Firestore error (report):", err);
+      document.getElementById("reportMsg").innerText = "❌ Failed to submit report.";
     }
+  });
+
+  // Request Leave
+  document.getElementById("leaveForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const type = document.getElementById("leaveType").value;
+    const startDate = document.getElementById("leaveFrom").value;
+    const endDate = document.getElementById("leaveTo").value;
+    const reason = document.getElementById("leaveReason").value.trim();
+
+    if (!type || !startDate || !endDate || !reason) {
+      return alert("Please fill in all leave fields.");
+    }
+
+    try {
+      console.log("📤 Sending leave request to Firestore...");
+      await addDoc(collection(db, "leaveRequests"), {
+        userId: user.uid,
+        name,
+        type,
+        startDate,
+        endDate,
+        reason,
+        status: "Pending",
+        createdAt: new Date()
+      });
+      console.log("✅ Leave request submitted.");
+      document.getElementById("leaveMsg").innerText = "📅 Leave request submitted.";
+      e.target.reset();
+    } catch (err) {
+      console.error("❌ Firestore error (leave):", err);
+      document.getElementById("leaveMsg").innerText = "❌ Failed to submit request.";
+    }
+  });
+
+  // Load tasks
+  try {
+    console.log("📥 Loading tasks for", user.uid);
+    const taskQuery = query(collection(db, "tasks"), where("userId", "==", user.uid));
+    const taskSnap = await getDocs(taskQuery);
+    const tasksList = document.getElementById("tasksList");
+    tasksList.innerHTML = "";
+
+    taskSnap.forEach(docSnap => {
+      const data = docSnap.data();
+      const div = document.createElement("div");
+      div.innerHTML = `
+        <p><strong>${data.title}</strong><br>${data.details}<br>
+        Status: ${data.completed ? "✅ Done" : "❌ Pending"}
+        ${!data.completed ? `<button data-id="${docSnap.id}" class="markDoneBtn">Mark as Done</button>` : ""}
+        </p><hr>
+      `;
+      tasksList.appendChild(div);
+    });
+
+    tasksList.addEventListener("click", async (e) => {
+      if (e.target.classList.contains("markDoneBtn")) {
+        const id = e.target.dataset.id;
+        await updateDoc(doc(db, "tasks", id), { completed: true });
+        location.reload();
+      }
+    });
 
   } catch (err) {
-    console.error("❌ Error loading user info:", err);
+    console.error("❌ Error loading tasks:", err);
   }
 });
 </script>

@@ -121,6 +121,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// Logout button
 document.getElementById("logoutBtn").addEventListener("click", () => {
   signOut(auth).then(() => window.location.href = "employee-portal.html");
 });
@@ -137,26 +138,39 @@ tabButtons.forEach(btn => {
   });
 });
 
-// Wait for auth
+// Auth listener
 onAuthStateChanged(auth, async (user) => {
-if (!userDoc.exists() || !userDoc.data().approved || 
-    (userDoc.data().role !== "employee" && userDoc.data().role !== "admin")) {
-    }
+  if (!user) {
+    console.warn("⚠ No user signed in.");
+    return;
+  }
 
+  try {
+    // Load user details from Firestore
+    const userRef = doc(db, "users", user.uid);
+    const userSnap = await getDoc(userRef);
+
+    if (!userSnap.exists()) {
+      console.warn("⚠ User document not found.");
+      return;
+    }
 
     const { name, email, position } = userSnap.data();
     document.getElementById("userDetails").innerHTML = `
       <p><strong>Name:</strong> ${name}</p>
       <p><strong>Email:</strong> ${email}</p>
       <p><strong>Position:</strong> ${position}</p>
-  `;
-    
+    `;
 
     // Submit Report
     document.getElementById("reportForm").addEventListener("submit", async (e) => {
       e.preventDefault();
       try {
-        const text = document.getElementById("reportText").value;
+        const text = document.getElementById("reportText").value.trim();
+        if (!text) {
+          alert("Please enter a report before submitting.");
+          return;
+        }
         await addDoc(collection(db, "reports"), {
           userId: user.uid,
           name,
@@ -166,7 +180,7 @@ if (!userDoc.exists() || !userDoc.data().approved ||
         document.getElementById("reportMsg").innerText = "✅ Report submitted.";
         e.target.reset();
       } catch (err) {
-        console.error("Error submitting report:", err);
+        console.error("❌ Error submitting report:", err);
         document.getElementById("reportMsg").innerText = "❌ Failed to submit report.";
       }
     });
@@ -176,16 +190,21 @@ if (!userDoc.exists() || !userDoc.data().approved ||
       e.preventDefault();
       try {
         const type = document.getElementById("leaveType").value;
-        const startDate = document.getElementById("leaveFrom").value;
-        const endDate = document.getElementById("leaveTo").value;
-        const reason = document.getElementById("leaveReason").value;
+        const startDateVal = document.getElementById("leaveFrom").value;
+        const endDateVal = document.getElementById("leaveTo").value;
+        const reason = document.getElementById("leaveReason").value.trim();
+
+        if (!type || !startDateVal || !endDateVal || !reason) {
+          alert("Please fill in all fields.");
+          return;
+        }
 
         await addDoc(collection(db, "leaveRequests"), {
           userId: user.uid,
           name,
           type,
-          startDate,
-          endDate,
+          startDate: new Date(startDateVal),
+          endDate: new Date(endDateVal),
           reason,
           status: "Pending",
           createdAt: new Date()
@@ -194,42 +213,47 @@ if (!userDoc.exists() || !userDoc.data().approved ||
         document.getElementById("leaveMsg").innerText = "📅 Leave request submitted.";
         e.target.reset();
       } catch (err) {
-        console.error("Error submitting leave request:", err);
+        console.error("❌ Error submitting leave request:", err);
         document.getElementById("leaveMsg").innerText = "❌ Failed to submit request.";
       }
     });
 
     // Load Tasks
-    const taskQuery = query(collection(db, "tasks"), where("userId", "==", user.uid));
-    const taskSnap = await getDocs(taskQuery);
-    const tasksList = document.getElementById("tasksList");
-    tasksList.innerHTML = "";
+    try {
+      const taskQuery = query(collection(db, "tasks"), where("userId", "==", user.uid));
+      const taskSnap = await getDocs(taskQuery);
+      const tasksList = document.getElementById("tasksList");
+      tasksList.innerHTML = "";
 
-    taskSnap.forEach(docSnap => {
-      const data = docSnap.data();
-      const div = document.createElement("div");
-      div.innerHTML = `
-        <p><strong>${data.title}</strong><br>${data.details}<br>
-        Status: ${data.completed ? "✅ Done" : "❌ Pending"}
-        ${!data.completed ? `<button data-id="${docSnap.id}" class="markDoneBtn">Mark as Done</button>` : ""}
-        </p><hr>
-      `;
-      tasksList.appendChild(div);
-    });
+      taskSnap.forEach(docSnap => {
+        const data = docSnap.data();
+        const div = document.createElement("div");
+        div.innerHTML = `
+          <p><strong>${data.title}</strong><br>${data.details}<br>
+          Status: ${data.completed ? "✅ Done" : "❌ Pending"}
+          ${!data.completed ? `<button data-id="${docSnap.id}" class="markDoneBtn">Mark as Done</button>` : ""}
+          </p><hr>
+        `;
+        tasksList.appendChild(div);
+      });
 
-    // Mark as done
-    tasksList.addEventListener("click", async (e) => {
-      if (e.target.classList.contains("markDoneBtn")) {
-        const id = e.target.dataset.id;
-        await updateDoc(doc(db, "tasks", id), { completed: true });
-        location.reload();
-      }
-    });
+      // Mark as done
+      tasksList.addEventListener("click", async (e) => {
+        if (e.target.classList.contains("markDoneBtn")) {
+          const id = e.target.dataset.id;
+          await updateDoc(doc(db, "tasks", id), { completed: true });
+          location.reload();
+        }
+      });
+    } catch (err) {
+      console.error("❌ Error loading tasks:", err);
+    }
 
+  } catch (err) {
+    console.error("❌ Error loading user info:", err);
+  }
 });
 </script>
-
-
 
 </body>
 </html>
